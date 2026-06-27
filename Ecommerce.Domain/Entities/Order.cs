@@ -21,12 +21,16 @@ public class Order : Entity
         return new Order();
     }
 
-    public void AddItem(
+    public Result AddItem(
         string product,
         int qty,
         Money price)
     {
-        EnsureEditable();
+        var editable =
+       EnsureEditable();
+
+        if (!editable.IsSuccess)
+            return editable;
 
         _items.Add(
             new OrderItem(
@@ -37,16 +41,22 @@ public class Order : Entity
         );
 
         Recalculate();
+
+        return Result
+                .Success();
     }
 
-    public void Pay()
+    public Result Pay()
     {
         if (!_items.Any())
-            throw new Exception(
-                "Order empty"
+            return Result
+            .Failure(
+                "Order is empty"
             );
 
         IsPaid = true;
+
+        return Result.Success();
     }
 
     private void Recalculate()
@@ -58,13 +68,15 @@ public class Order : Entity
                     Money.Zero,
                     (a, b) => a + b
                 );
+
     }
 
-    private void EnsureEditable()
+    private Result EnsureEditable()
     {
         if (IsPaid)
-            throw new Exception(
-                "Order already paid"
-            );
+            return Result.Failure("Order already paid");
+
+        return Result
+        .Success();
     }
 }
