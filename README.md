@@ -1,174 +1,86 @@
-# \# Ecommerce Clean Architecture + DDD
+# Ecommerce Clean Architecture + DDD
 
-# 
+Production-oriented ASP.NET Core Web API built using Clean Architecture and Domain-Driven Design (DDD).
 
-# Production-oriented ASP.NET Core Web API built using Clean Architecture and Domain-Driven Design (DDD).
+---
 
-# 
+## Tech Stack
 
-# \---
+* ASP.NET Core (.NET 9)
+* Entity Framework Core
+* PostgreSQL
+* Docker
+* Clean Architecture
+* Domain-Driven Design (DDD)
 
-# 
+---
 
-# \## Tech Stack
+## Project Structure
 
-# 
+```plaintext
+src
+├── Ecommerce.Api
+├── Ecommerce.Application
+├── Ecommerce.Domain
+└── Ecommerce.Infrastructure
+```
 
-# \* ASP.NET Core (.NET 9)
+---
 
-# \* Entity Framework Core
+## Architecture
 
-# \* PostgreSQL
+### Layers
 
-# \* Docker
+* Domain
+* Application
+* Infrastructure
+* API
 
-# \* Clean Architecture
+### Principles
 
-# \* Domain-Driven Design (DDD)
+* Dependency Inversion
+* Persistence Ignorance
+* Rich Domain Model
+* Aggregate Root
+* Repository Pattern
 
-# 
+---
 
-# \---
+## Current Features
 
-# 
+* Order Aggregate
+* Create Order Use Case
+* Repository Pattern
+* PostgreSQL Persistence
 
-# \## Project Structure
+---
 
-# 
+## Planned Features
 
-# ```plaintext
+* CQRS
+* FluentValidation
+* Result Pattern
+* Global Exception Handling
+* Domain Events
+* Unit Tests
+* Integration Tests
+* Docker Environment
+* CI/CD
 
-# src
+---
 
-# ├── Ecommerce.Api
+## Run
 
-# ├── Ecommerce.Application
+```bash
+docker compose up -d
 
-# ├── Ecommerce.Domain
+dotnet ef database update
 
-# └── Ecommerce.Infrastructure
+dotnet run --project Ecommerce.Api
+```
 
-# ```
+Swagger:
 
-# 
-
-# \---
-
-# 
-
-# \## Architecture
-
-# 
-
-# Layers:
-
-# 
-
-# \* Domain
-
-# \* Application
-
-# \* Infrastructure
-
-# \* API
-
-# 
-
-# Principles:
-
-# 
-
-# \* Dependency Inversion
-
-# \* Persistence Ignorance
-
-# \* Rich Domain Model
-
-# \* Aggregate Root
-
-# \* Repository Pattern
-
-# 
-
-# \---
-
-# 
-
-# \## Current Features
-
-# 
-
-# \* Order Aggregate
-
-# \* Create Order Use Case
-
-# \* Repository Pattern
-
-# \* PostgreSQL Persistence
-
-# 
-
-# \---
-
-# 
-
-# \## Planned Features
-
-# 
-
-# \* CQRS
-
-# \* FluentValidation
-
-# \* Result Pattern
-
-# \* Global Exception Handling
-
-# \* Domain Events
-
-# \* Unit Tests
-
-# \* Integration Tests
-
-# \* Docker Environment
-
-# \* CI/CD
-
-# 
-
-# \---
-
-# 
-
-# \## Run
-
-# 
-
-# ```bash
-
-# docker compose up -d
-
-# 
-
-# dotnet ef database update
-
-# 
-
-# dotnet run --project Ecommerce.Api
-
-# ```
-
-# 
-
-# Swagger:
-
-# 
-
-# ```plaintext
-
-# http://localhost:5000/swagger
-
-# ```
-
-
-
+```plaintext
+http://localhost:5000/swagger
+```
