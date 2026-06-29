@@ -1,6 +1,7 @@
 ﻿using Ecommerce.Domain.Entities;
 using Ecommerce.Domain.Repositories;
 using Ecommerce.Infrastructure.Persistence;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -20,14 +21,15 @@ namespace Ecommerce.Infrastructure.Repositories
         {
             return await
                 _db.Orders
-                .FindAsync(id); 
+                .Include(x => x.Items)
+                .FirstOrDefaultAsync(x => x.Id == id);
         }
 
         public async Task Save(Order order)
         {
             _db.Orders.Add(order);
 
-            await _db.SaveChangesAsync();   
+            await _db.SaveChangesAsync();
         }
     }
 }
