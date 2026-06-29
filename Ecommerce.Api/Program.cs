@@ -1,3 +1,4 @@
+using Ecommerce.Api.Extensions;
 using Ecommerce.Application;
 using Ecommerce.Infrastructure;
 
@@ -27,6 +28,7 @@ app.UseHttpsRedirection();
 
 app.UseSwagger();
 app.UseSwaggerUI();
+app.UseGlobalExceptions();
 app.MapControllers();
 
 app.Run();

@@ -9,14 +9,16 @@ namespace Ecommerce.Api.Controllers
     public class OrdersController : ControllerBase
     {
         [HttpPost]
-        public async Task<IActionResult> Create([FromServices] CreateOrderHandler handler,
-            [FromBody] CreateOrderDto dto)
+        public async Task<IActionResult>
+        Create([FromBody] CreateOrderDto dto, [FromServices] CreateOrderHandler handler)
         {
-            var id = await handler.Execute(
-                    new CreateOrderCommand(dto)
-                );
+            var id =await handler.Execute(new(dto));
 
-            return Ok(new { id });
+            return Created($"/orders/{id}",
+                new
+                {
+                    id
+                });
         }
     }
 }

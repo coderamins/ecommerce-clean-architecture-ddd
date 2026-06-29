@@ -1,6 +1,5 @@
 ﻿using Ecommerce.Domain.Common;
 using Ecommerce.Domain.Entities;
-using Ecommerce.Domain.Factories;
 using Ecommerce.Domain.Repositories;
 using Ecommerce.Domain.ValueObjects;
 
@@ -16,7 +15,7 @@ namespace Ecommerce.Application.Commands.CreateOrder
             _repository = repository;
         }
 
-        public async Task<Result<Guid>> Execute(
+        public async Task<Guid> Execute(
             CreateOrderCommand cmd)
         {
             var order = Order.Create();
@@ -30,20 +29,15 @@ namespace Ecommerce.Application.Commands.CreateOrder
                     item.Quantity,
                     new Money(item.price));
 
-                if (
-                !result.IsSuccess
-            )
+                if (!result.IsSuccess)
                 {
-                    return Result<Guid>
-                        .Failure(
-                            result.Error!
-                        );
+                    throw new DomainException(result.Error!);
                 }
             }
 
             await _repository.Save(order);
 
-            return Result<Guid>.Success(order.Id);
+            return order.Id;
         }
     }
 }

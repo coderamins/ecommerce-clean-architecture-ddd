@@ -22,9 +22,4 @@
     <ProjectReference Include="..\Ecommerce.Infrastructure\Ecommerce.Infrastructure.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Extensions\" />
-    <Folder Include="Middleware\" />
-  </ItemGroup>
-
 </Project>

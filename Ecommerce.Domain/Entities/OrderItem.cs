@@ -18,7 +18,7 @@ namespace Ecommerce.Domain.Entities
             Money price)
         {
             if (quantity <= 0)
-                throw new Exception("Quantity Invalid!");
+                throw new DomainException("Quantity Invalid!");
 
             ProductName = productName;
             Quantity = quantity;

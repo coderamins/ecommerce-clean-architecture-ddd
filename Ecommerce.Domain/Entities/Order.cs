@@ -31,6 +31,12 @@ public class Order : Entity
 
         if (!editable.IsSuccess)
             return editable;
+        if (price.Amount <= 0)
+        {
+            return Result.Failure(
+                "Price invalid"
+            );
+        }
 
         _items.Add(
             new OrderItem(
