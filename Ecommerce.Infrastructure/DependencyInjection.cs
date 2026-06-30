@@ -1,11 +1,11 @@
-﻿using Ecommerce.Domain.Repositories;
+﻿using Ecommerce.Application.Events;
+using Ecommerce.Application.Interfaces;
+using Ecommerce.Domain.Repositories;
+using Ecommerce.Infrastructure.Events;
 using Ecommerce.Infrastructure.Persistence;
 using Ecommerce.Infrastructure.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Ecommerce.Infrastructure
 {
@@ -18,9 +18,13 @@ namespace Ecommerce.Infrastructure
                 x.UseNpgsql(connection)
             );
 
+            services.AddScoped<IDomainEventDispatcher, DomainEventDispatcher>();
+            services.AddScoped<IOrderReadRepository, OrderReadRepository>();
+            //services.AddHostedService<OutboxProcessor>();
+
             services.AddScoped<IOrderRepository, OrderRepository>();
 
-            return services;    
+            return services;
         }
     }
 }

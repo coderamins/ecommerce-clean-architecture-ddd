@@ -1,4 +1,5 @@
 ﻿using Ecommerce.Application.Commands.CreateOrder;
+using Ecommerce.Application.Events;
 using Ecommerce.Application.Queries.GetOrder;
 using FluentValidation;
 using Microsoft.Extensions.DependencyInjection;
@@ -14,7 +15,7 @@ namespace Ecommerce.Application
 
             services.AddValidatorsFromAssembly(typeof(DependencyInjection).Assembly);
 
-            return services;    
+            return services;
         }
     }
 }

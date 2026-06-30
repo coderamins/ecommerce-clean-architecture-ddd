@@ -8,7 +8,7 @@ namespace Ecommerce.Application.Queries.GetOrder
     (
             string ProductName,
             int Quantity,
-            decimal price
+            decimal Price
     );
 
     public record GetOrderResponse

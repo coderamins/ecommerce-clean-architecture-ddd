@@ -1,45 +1,41 @@
 ﻿using Ecommerce.Domain.Common;
+using Ecommerce.Domain.Events;
 using Ecommerce.Domain.ValueObjects;
 
 namespace Ecommerce.Domain.Entities;
 
-public class Order : Entity
+public class Order : AggregateRoot
 {
     private readonly List<OrderItem> _items = new();
 
-    public IReadOnlyCollection<OrderItem> Items
-        => _items;
+    public IReadOnlyCollection<OrderItem> Items => _items;
 
-    public Money Total { get; private set; }
-        = Money.Zero;
+    public Money Total { get; private set; } = Money.Zero;
 
     public bool IsPaid { get; private set; }
 
     private Order() { }
     public static Order Create()
     {
-        return new Order();
+        var order= new Order();
+        order.AddEvent(new OrderCreated(order.Id));
+
+        return order;
     }
 
-    public Result AddItem(
-        string product,
-        int qty,
-        Money price)
+    public Result AddItem(string product, int qty, Money price)
     {
-        var editable =
-       EnsureEditable();
+        var editable = EnsureEditable();
 
         if (!editable.IsSuccess)
             return editable;
+
         if (price.Amount <= 0)
         {
-            return Result.Failure(
-                "Price invalid"
-            );
+            return Result.Failure("Price invalid");
         }
 
-        _items.Add(
-            new OrderItem(
+        _items.Add(new OrderItem(
                 product,
                 qty,
                 price
@@ -48,17 +44,13 @@ public class Order : Entity
 
         Recalculate();
 
-        return Result
-                .Success();
+        return Result.Success();
     }
 
     public Result Pay()
     {
         if (!_items.Any())
-            return Result
-            .Failure(
-                "Order is empty"
-            );
+            return Result.Failure("Order is empty");
 
         IsPaid = true;
 
@@ -68,8 +60,7 @@ public class Order : Entity
     private void Recalculate()
     {
         Total =
-            _items
-                .Select(x => x.Total())
+            _items.Select(x => x.Total())
                 .Aggregate(
                     Money.Zero,
                     (a, b) => a + b

@@ -7,17 +7,18 @@ using System.Text;
 
 namespace Ecommerce.Infrastructure.Persistence
 {
-    public class ApplicationDbContext:DbContext
+    public class ApplicationDbContext : DbContext
     {
-        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options):base(options)
-        {            
+        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
+        {
         }
 
         public DbSet<Order> Orders => Set<Order>();
         public DbSet<OrderItem> Items => Set<OrderItem>();
+        public DbSet<OutboxMessage> Outbox => Set<OutboxMessage>();
 
         #region Read models
-            public DbSet<OrderReadModel> OrderReads => Set<OrderReadModel>();
+        public DbSet<OrderReadModel> OrderReads => Set<OrderReadModel>();
 
         #endregion
 
