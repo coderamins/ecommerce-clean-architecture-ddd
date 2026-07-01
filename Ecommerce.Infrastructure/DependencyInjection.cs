@@ -4,6 +4,7 @@ using Ecommerce.Domain.Repositories;
 using Ecommerce.Infrastructure.Events;
 using Ecommerce.Infrastructure.Persistence;
 using Ecommerce.Infrastructure.Repositories;
+using Ecommerce.Infrastructure.Workers;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -20,7 +21,7 @@ namespace Ecommerce.Infrastructure
 
             services.AddScoped<IDomainEventDispatcher, DomainEventDispatcher>();
             services.AddScoped<IOrderReadRepository, OrderReadRepository>();
-            //services.AddHostedService<OutboxProcessor>();
+            services.AddHostedService<OutboxProcessor>();
 
             services.AddScoped<IOrderRepository, OrderRepository>();
 

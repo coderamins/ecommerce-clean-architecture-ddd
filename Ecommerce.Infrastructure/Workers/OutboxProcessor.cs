@@ -1,8 +1,11 @@
 ﻿using Ecommerce.Application.Events;
+using Ecommerce.Domain.Common;
+using Ecommerce.Domain.Events;
 using Ecommerce.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using System.Text.Json;
 
 namespace Ecommerce.Infrastructure.Workers
 {
@@ -33,7 +36,16 @@ namespace Ecommerce.Infrastructure.Workers
                     {
                         try
                         {
-                            //await dispatcher.Dispatch(m);
+                            DomainEvent? domainEvent = m.Type switch
+                            {
+                                nameof(OrderCreated) => JsonSerializer.Deserialize<OrderCreated>(m.Data),
+                                _ => null
+                            };
+
+                            if (domainEvent is not null)
+                            {
+                                await dispatcher.Dispatch([domainEvent]);
+                            }
 
                             m.ProcessedAt = DateTime.UtcNow;
                         }
