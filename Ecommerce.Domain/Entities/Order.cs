@@ -17,7 +17,7 @@ public class Order : AggregateRoot
     private Order() { }
     public static Order Create()
     {
-        var order= new Order();
+        var order = new Order();
         order.AddEvent(new OrderCreated(order.Id));
 
         return order;
@@ -49,10 +49,17 @@ public class Order : AggregateRoot
 
     public Result Pay()
     {
+        if (IsPaid)
+        {
+            return Result.Failure("Order already paid");
+        }
+
         if (!_items.Any())
             return Result.Failure("Order is empty");
 
         IsPaid = true;
+
+        AddEvent(new OrderPaid(Id,DateTime.UtcNow));
 
         return Result.Success();
     }

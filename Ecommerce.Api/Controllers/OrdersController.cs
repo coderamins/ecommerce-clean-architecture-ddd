@@ -1,4 +1,5 @@
 ﻿using Ecommerce.Application.Commands.CreateOrder;
+using Ecommerce.Application.Commands.PayOrder;
 using Ecommerce.Application.DTOs;
 using Ecommerce.Application.Queries.GetOrder;
 using Microsoft.AspNetCore.Mvc;
@@ -19,7 +20,8 @@ namespace Ecommerce.Api.Controllers
 
         [HttpPost]
         public async Task<IActionResult>
-        Create([FromBody] CreateOrderDto dto, [FromServices] CreateOrderHandler handler)
+        Create([FromBody] CreateOrderDto dto, 
+            [FromServices] CreateOrderHandler handler)
         {
             var id =await handler.Execute(new(dto));
 
@@ -28,6 +30,15 @@ namespace Ecommerce.Api.Controllers
                 {
                     id
                 });
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Pay(Guid id, 
+            [FromServices] PayOrderHandler handler)
+        {
+            await handler.Execute(new PayOrderCommand(id));
+
+            return NoContent(); 
         }
     }
 }

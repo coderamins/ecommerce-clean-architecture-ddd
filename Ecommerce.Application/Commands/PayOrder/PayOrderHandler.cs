@@ -1,0 +1,33 @@
+﻿using Ecommerce.Domain.Common;
+using Ecommerce.Domain.Repositories;
+
+namespace Ecommerce.Application.Commands.PayOrder
+{
+    public class PayOrderHandler
+    {
+        private readonly IOrderRepository _orderRepo;
+
+        public PayOrderHandler(IOrderRepository orderRepo)
+        {
+            _orderRepo = orderRepo;
+        }
+
+        public async Task Execute(PayOrderCommand command)
+        {
+            var order = await _orderRepo.Get(command.orderId);
+
+            if(order is null)
+            {
+                throw new DomainException("Order not found");
+            }
+
+            var result = order.Pay();
+            if(!result.IsSuccess)
+            {
+                throw new DomainException(result.Error!);
+            }
+
+            await _orderRepo.Update(order);
+        }
+    }
+}

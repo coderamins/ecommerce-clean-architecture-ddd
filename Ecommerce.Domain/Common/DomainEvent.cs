@@ -4,8 +4,8 @@ using System.Text;
 
 namespace Ecommerce.Domain.Common
 {
-    public abstract class DomainEvent
+    public abstract record DomainEvent
     {
-        public DateTime OccuredOn => DateTime.UtcNow;
+        public DateTime OccuredOn { get; init; } = DateTime.UtcNow;
     }
 }

@@ -35,5 +35,15 @@ namespace Ecommerce.Infrastructure.Repositories
             await _dispatcher.Dispatch(order.Events);
             order.ClearEvents();
         }
+
+        public async Task Update(Order order)
+        {
+            _db.Orders.Update(order);
+
+            await _db.SaveChangesAsync();
+
+            await _dispatcher.Dispatch(order.Events);
+            order.ClearEvents();
+        }
     }
 }
