@@ -49,12 +49,12 @@ namespace Ecommerce.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<DateTime?>("ProcessedAt")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<string>("Type")
+                    b.Property<string>("EventName")
                         .IsRequired()
                         .HasColumnType("text");
+
+                    b.Property<DateTime?>("ProcessedAt")
+                        .HasColumnType("timestamp with time zone");
 
                     b.HasKey("Id");
 

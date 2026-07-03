@@ -1,6 +1,6 @@
-﻿using Ecommerce.Domain.Entities;
+﻿using Ecommerce.Domain.Orders;
 
-namespace Ecommerce.Domain.Repositories
+namespace Ecommerce.Domain.Orders.Repositories
 {
     public interface IOrderRepository
     {

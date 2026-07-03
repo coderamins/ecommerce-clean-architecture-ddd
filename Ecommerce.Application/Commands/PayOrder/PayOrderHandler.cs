@@ -1,5 +1,5 @@
 ﻿using Ecommerce.Domain.Common;
-using Ecommerce.Domain.Repositories;
+using Ecommerce.Domain.Orders.Repositories;
 
 namespace Ecommerce.Application.Commands.PayOrder
 {

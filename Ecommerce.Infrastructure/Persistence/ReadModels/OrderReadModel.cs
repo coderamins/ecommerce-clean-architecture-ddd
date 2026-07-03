@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Ecommerce.Infrastructure.Persistence.ReadModels
+﻿namespace Ecommerce.Infrastructure.Persistence.ReadModels
 {
     public class OrderReadModel
     {

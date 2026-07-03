@@ -1,4 +1,4 @@
-﻿using Ecommerce.Domain.Entities;
+﻿using Ecommerce.Domain.Orders;
 using System;
 using System.Collections.Generic;
 using System.Text;

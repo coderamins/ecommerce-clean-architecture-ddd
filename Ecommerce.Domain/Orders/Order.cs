@@ -1,8 +1,8 @@
 ﻿using Ecommerce.Domain.Common;
 using Ecommerce.Domain.Events;
-using Ecommerce.Domain.ValueObjects;
+using Ecommerce.Domain.Orders.ValueObjects;
 
-namespace Ecommerce.Domain.Entities;
+namespace Ecommerce.Domain.Orders;
 
 public class Order : AggregateRoot
 {
@@ -12,7 +12,8 @@ public class Order : AggregateRoot
 
     public Money Total { get; private set; } = Money.Zero;
 
-    public bool IsPaid { get; private set; }
+    public OrderStatus Status { get; private set; }
+    = OrderStatus.Pending;
 
     private Order() { }
     public static Order Create()
@@ -49,7 +50,7 @@ public class Order : AggregateRoot
 
     public Result Pay()
     {
-        if (IsPaid)
+        if (Status==OrderStatus.Paid)
         {
             return Result.Failure("Order already paid");
         }
@@ -57,9 +58,9 @@ public class Order : AggregateRoot
         if (!_items.Any())
             return Result.Failure("Order is empty");
 
-        IsPaid = true;
+        Status = OrderStatus.Paid;
 
-        AddEvent(new OrderPaid(Id,DateTime.UtcNow));
+        AddEvent(new OrderPaid(Id, DateTime.UtcNow));
 
         return Result.Success();
     }
@@ -77,10 +78,25 @@ public class Order : AggregateRoot
 
     private Result EnsureEditable()
     {
-        if (IsPaid)
+        if (Status==OrderStatus.Paid)
             return Result.Failure("Order already paid");
 
         return Result
         .Success();
+    }
+
+    public Result Cancel()
+    {
+        if (Status == OrderStatus.Cancelled)
+            return Result.Failure("Order laready cancelled");
+
+        if (Status == OrderStatus.Paid)
+            return Result.Failure("Paid order cannot be cancelled");
+
+        Status = OrderStatus.Cancelled;
+
+        //AddEvent(new OrderCancelled(Id, DateTime.UtcNow));
+
+        return Result.Success();
     }
 }

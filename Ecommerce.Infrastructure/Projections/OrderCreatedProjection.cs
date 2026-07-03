@@ -1,10 +1,11 @@
-﻿using Ecommerce.Domain.Events;
+﻿using Ecommerce.Application.Events;
+using Ecommerce.Domain.Events;
 using Ecommerce.Infrastructure.Persistence;
 using Ecommerce.Infrastructure.Persistence.ReadModels;
 
 namespace Ecommerce.Infrastructure.Projections
 {
-    public class OrderCreatedProjection
+    public class OrderCreatedProjection:IDomainEventHandler<OrderCreated>
     {
         private readonly ApplicationDbContext _db;
 
@@ -17,7 +18,7 @@ namespace Ecommerce.Infrastructure.Projections
         {
             _db.OrderReads.Add(new OrderReadModel
             {
-                Id=e.OrderId,
+                Id=e.orderId,
                 Total=0,
                 IsPaid=false,
             });

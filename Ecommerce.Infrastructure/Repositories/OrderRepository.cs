@@ -1,9 +1,11 @@
 ﻿using Ecommerce.Application.Events;
-using Ecommerce.Domain.Entities;
-using Ecommerce.Domain.Repositories;
+using Ecommerce.Domain.Common;
+using Ecommerce.Domain.Orders;
+using Ecommerce.Domain.Orders.Repositories;
+using Ecommerce.Infrastructure.Outbox;
 using Ecommerce.Infrastructure.Persistence;
-using Ecommerce.Infrastructure.Persistence.ReadModels;
 using Microsoft.EntityFrameworkCore;
+using System.Reflection;
 using System.Text.Json;
 
 namespace Ecommerce.Infrastructure.Repositories
@@ -11,12 +13,13 @@ namespace Ecommerce.Infrastructure.Repositories
     public class OrderRepository : IOrderRepository
     {
         private readonly ApplicationDbContext _db;
-        //private readonly IDomainEventDispatcher _dispatcher;
+        private readonly IEventMetadataProvider _metadataProvider;
 
-        public OrderRepository(ApplicationDbContext db)
+        public OrderRepository(ApplicationDbContext db, 
+            IEventMetadataProvider metadataProvider)
         {
             _db = db;
-            //_dispatcher = dispatcher;
+            _metadataProvider = metadataProvider;
         }
 
         public async Task<Order?> Get(Guid id)
@@ -31,28 +34,43 @@ namespace Ecommerce.Infrastructure.Repositories
         {
             _db.Orders.Add(order);
 
-            foreach(var e in order.Events)
+            foreach (var e in order.Events)
             {
+                var attribute = e.GetType()
+                    .GetCustomAttribute<EventNameAttribute>();
+
+                if (attribute is null)
+                    throw new InvalidOperationException($"Event {e.GetType().Name} has no EventNameAttribute.");
+
                 _db.Outbox.Add(new OutboxMessage
                 {
                     Id = Guid.NewGuid(),
-                    Type = e.GetType().Name,
+                    EventName = _metadataProvider.GetEventName(e),
                     Data = JsonSerializer.Serialize(e),
                     CreatedAt = DateTime.UtcNow
                 });
             }
-            
+
             await _db.SaveChangesAsync();
             order.ClearEvents();
         }
 
         public async Task Update(Order order)
         {
-            _db.Orders.Update(order);
+            foreach (var e in order.Events)
+            {
+                _db.Outbox.Add(
+                    new OutboxMessage
+                    {
+                        Id = Guid.NewGuid(),
+                        EventName = _metadataProvider.GetEventName(e),
+                        Data = JsonSerializer.Serialize(e),
+                        CreatedAt = DateTime.UtcNow
+                    });
+            }
 
             await _db.SaveChangesAsync();
 
-            await _dispatcher.Dispatch(order.Events);
             order.ClearEvents();
         }
     }

@@ -1,9 +1,6 @@
-﻿using Ecommerce.Domain.Entities;
+﻿using Ecommerce.Domain.Orders;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Ecommerce.Infrastructure.Persistence.Configurations
 {

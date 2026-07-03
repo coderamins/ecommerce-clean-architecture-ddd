@@ -1,9 +1,7 @@
-﻿using Ecommerce.Domain.Entities;
+﻿using Ecommerce.Domain.Orders;
+using Ecommerce.Infrastructure.Outbox;
 using Ecommerce.Infrastructure.Persistence.ReadModels;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Ecommerce.Infrastructure.Persistence
 {
@@ -16,6 +14,7 @@ namespace Ecommerce.Infrastructure.Persistence
         public DbSet<Order> Orders => Set<Order>();
         public DbSet<OrderItem> Items => Set<OrderItem>();
         public DbSet<OutboxMessage> Outbox => Set<OutboxMessage>();
+        public DbSet<ProcessedEvent> ProcessedEvents => Set<ProcessedEvent>();  
 
         #region Read models
         public DbSet<OrderReadModel> OrderReads => Set<OrderReadModel>();

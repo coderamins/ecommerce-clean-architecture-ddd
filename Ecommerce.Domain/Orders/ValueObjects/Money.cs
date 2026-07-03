@@ -1,5 +1,4 @@
-﻿
-namespace Ecommerce.Domain.ValueObjects
+﻿namespace Ecommerce.Domain.Orders.ValueObjects
 {
     public record Money(decimal Amount)
     {

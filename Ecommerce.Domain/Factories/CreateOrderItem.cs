@@ -1,7 +1,4 @@
-﻿using Ecommerce.Domain.ValueObjects;
-using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using Ecommerce.Domain.Orders.ValueObjects;
 
 namespace Ecommerce.Domain.Factories
 {

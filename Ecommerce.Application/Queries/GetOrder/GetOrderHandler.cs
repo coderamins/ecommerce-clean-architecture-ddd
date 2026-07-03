@@ -1,9 +1,6 @@
 ﻿using Ecommerce.Application.Interfaces;
 using Ecommerce.Domain.Common;
-using Ecommerce.Domain.Repositories;
-using System;
-using System.Collections.Generic;
-using System.Text;
+using Ecommerce.Domain.Orders.Repositories;
 
 namespace Ecommerce.Application.Queries.GetOrder
 {
@@ -20,7 +17,6 @@ namespace Ecommerce.Application.Queries.GetOrder
 
         public async Task<GetOrderResponse> Execute(GetOrderQuery query)
         {
-            //var order = await _repo.Get(query.OrderId);
             var order = await _repository.Get(query.OrderId);
 
             if (order is null)

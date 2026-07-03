@@ -1,10 +1,7 @@
 ﻿using Ecommerce.Domain.Common;
-using Ecommerce.Domain.ValueObjects;
-using System;
-using System.Collections.Generic;
-using System.Text;
+using Ecommerce.Domain.Orders.ValueObjects;
 
-namespace Ecommerce.Domain.Entities
+namespace Ecommerce.Domain.Orders
 {
     public class OrderItem : Entity
     {
