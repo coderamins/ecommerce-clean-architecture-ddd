@@ -6,22 +6,10 @@ namespace Ecommerce.Infrastructure.Persistence.ReadModels
 {
     public class OrderItemReadModel
     {
-        public string ProductName
-        {
-            get;
-            set;
-        } = "";
+        public string ProductName { get; set; } = "";
 
-        public int Quantity
-        {
-            get;
-            set;
-        }
+        public int Quantity { get; set; }
 
-        public decimal Price
-        {
-            get;
-            set;
-        }
+        public decimal Price { get; set; }
     }
 }

@@ -1,10 +1,11 @@
-﻿using Ecommerce.Application.Interfaces;
+﻿using Ecommerce.Application.Common.Interfaces;
 using Ecommerce.Domain.Common;
 using Ecommerce.Domain.Orders.Repositories;
+using MediatR;
 
-namespace Ecommerce.Application.Queries.GetOrder
+namespace Ecommerce.Application.Features.Orders.Get
 {
-    public class GetOrderHandler
+    public class GetOrderHandler:IRequestHandler<GetOrderQuery, GetOrderResponse>
     {
         private readonly IOrderRepository _repo;
         private readonly IOrderReadRepository _repository;
@@ -15,19 +16,19 @@ namespace Ecommerce.Application.Queries.GetOrder
             _repository = repository;
         }
 
-        public async Task<GetOrderResponse> Execute(GetOrderQuery query)
+        public async Task<GetOrderResponse> Handle(GetOrderQuery request,CancellationToken ct)
         {
-            var order = await _repository.Get(query.OrderId);
+            var order = await _repository.Get(request.OrderId);
 
             if (order is null)
             {
                 throw new DomainException("Order Not Found");
             }
 
-            return new(
+            return new GetOrderResponse(
                     order.Id,
                     order.Total,
-                    order.IsPaid,
+                    order.Status,
                     order.Items
                         .Select(
                             x =>

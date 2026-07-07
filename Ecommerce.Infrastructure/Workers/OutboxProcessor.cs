@@ -1,4 +1,4 @@
-﻿using Ecommerce.Application.Interfaces;
+﻿using Ecommerce.Application.Common.Interfaces;
 using Ecommerce.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;

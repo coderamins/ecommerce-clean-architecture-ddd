@@ -2,10 +2,11 @@
 using Ecommerce.Domain.Orders;
 using Ecommerce.Domain.Orders.Repositories;
 using Ecommerce.Domain.Orders.ValueObjects;
+using MediatR;
 
-namespace Ecommerce.Application.Commands.CreateOrder
+namespace Ecommerce.Application.Features.Orders.Create
 {
-    public class CreateOrderHandler
+    public class CreateOrderHandler : IRequestHandler<CreateOrderCommand, Guid>
     {
         private readonly IOrderRepository _repository;
 
@@ -14,23 +15,22 @@ namespace Ecommerce.Application.Commands.CreateOrder
             _repository = repository;
         }
 
-        public async Task<Guid> Execute(
-            CreateOrderCommand cmd)
+        public async Task<Guid> Handle(CreateOrderCommand cmd,CancellationToken ct)
         {
             var order = Order.Create();
 
-            foreach (var item in cmd.Order.Items)
+            foreach (var item in cmd.Items)
             {
                 var result = order.AddItem(
                     item.ProductName,
                     item.Quantity,
-                    new Money(item.price));
+                    new Money(item.Price));
 
                 if (!result.IsSuccess)
-                {
                     throw new DomainException(result.Error!);
-                }
             }
+
+            order.CompleteCreation();
 
             await _repository.Save(order);
 

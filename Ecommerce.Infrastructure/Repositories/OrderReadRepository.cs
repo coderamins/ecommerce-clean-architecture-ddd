@@ -1,10 +1,7 @@
-﻿using Ecommerce.Application.Interfaces;
-using Ecommerce.Application.Queries.GetOrder;
+﻿using Ecommerce.Application.Common.Interfaces;
+using Ecommerce.Application.Features.Orders.Get;
 using Ecommerce.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Ecommerce.Infrastructure.Repositories
 {
@@ -26,7 +23,7 @@ namespace Ecommerce.Infrastructure.Repositories
                     new GetOrderResponse(
                         x.Id,
                         x.Total,
-                        x.IsPaid,
+                        x.Status,
                         x.Items
                         .Select(
                             i =>

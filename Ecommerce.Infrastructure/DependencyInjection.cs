@@ -1,8 +1,10 @@
-﻿using Ecommerce.Application.Events;
-using Ecommerce.Application.Interfaces;
+﻿using Ecommerce.Application.Common.Interfaces;
+using Ecommerce.Application.Events;
 using Ecommerce.Domain.Events;
+using Ecommerce.Domain.Orders.Events;
 using Ecommerce.Domain.Orders.Repositories;
 using Ecommerce.Infrastructure.Events;
+using Ecommerce.Infrastructure.Outbox;
 using Ecommerce.Infrastructure.Persistence;
 using Ecommerce.Infrastructure.Projections;
 using Ecommerce.Infrastructure.Repositories;
@@ -24,9 +26,14 @@ namespace Ecommerce.Infrastructure
             services.AddScoped<IDomainEventDispatcher, DomainEventDispatcher>();
             services.AddScoped<IOrderReadRepository, OrderReadRepository>();
             services.AddHostedService<OutboxProcessor>();
+            services.AddScoped<IOutboxMessageProcessor, OutboxMessageProcessor>();
+            
+            services.AddScoped<IDomainEventHandler<OrderCreated>, OrderCreatedProjection>();
             services.AddScoped<IDomainEventHandler<OrderPaid>, OrderPaidProjection>();
+            services.AddScoped<IDomainEventHandler<OrderCancelled>, OrderCancelledProjection>();
+
             services.AddScoped<IOrderRepository, OrderRepository>();
-    
+
             services.AddSingleton<IEventRegistry, EventRegistry>();
             services.AddSingleton<IEventMetadataProvider,EventMetadataProvider>();
 

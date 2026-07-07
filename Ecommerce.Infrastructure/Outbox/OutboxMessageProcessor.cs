@@ -1,5 +1,5 @@
-﻿using Ecommerce.Application.Events;
-using Ecommerce.Application.Interfaces;
+﻿using Ecommerce.Application.Common.Interfaces;
+using Ecommerce.Application.Events;
 using Ecommerce.Domain.Common;
 using Ecommerce.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;

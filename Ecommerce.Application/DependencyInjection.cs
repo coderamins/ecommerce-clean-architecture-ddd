@@ -1,7 +1,8 @@
-﻿using Ecommerce.Application.Commands.CreateOrder;
-using Ecommerce.Application.Events;
-using Ecommerce.Application.Queries.GetOrder;
+﻿using Ecommerce.Application.Behaviors;
+using Ecommerce.Application.Features.Orders.Create;
+using Ecommerce.Application.Validation;
 using FluentValidation;
+using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Ecommerce.Application
@@ -10,10 +11,18 @@ namespace Ecommerce.Application
     {
         public static IServiceCollection AddApplication(this IServiceCollection services)
         {
-            services.AddScoped<CreateOrderHandler>();
-            services.AddScoped<GetOrderHandler>();
-
             services.AddValidatorsFromAssembly(typeof(DependencyInjection).Assembly);
+
+            services.AddMediatR(cfg =>
+            {
+                cfg.RegisterServicesFromAssemblies(typeof(CreateOrderHandler).Assembly);
+            });
+
+            services.AddValidatorsFromAssembly(typeof(CreateOrderValidator).Assembly);
+
+            services.AddTransient(typeof(IPipelineBehavior<,>), typeof(LoggingBehavior<,>));
+
+            services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
 
             return services;
         }

@@ -1,4 +1,5 @@
 ﻿using Ecommerce.Domain.Common;
+using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Ecommerce.Api.Middleware
@@ -22,9 +23,23 @@ namespace Ecommerce.Api.Middleware
             {
                 await Handle(context, StatusCodes.Status400BadRequest, ex.Message);
             }
-            catch (Exception ex)
+            catch (ValidationException ex)
             {
-                await Handle(context, StatusCodes.Status500InternalServerError, "Unexpected error");
+                context.Response.StatusCode = StatusCodes.Status400BadRequest;
+
+                var errors = ex.Errors
+                    .GroupBy(x => x.PropertyName)
+                    .ToDictionary(
+                        g => g.Key,
+                        g => g.Select(x => x.ErrorMessage).ToArray());
+
+                await context.Response.WriteAsJsonAsync(new
+                {
+                    Title = "Validation failed",
+                    Errors = errors
+                });
+
+                return;
             }
         }
 

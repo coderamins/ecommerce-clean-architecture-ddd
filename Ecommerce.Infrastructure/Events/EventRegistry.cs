@@ -1,10 +1,6 @@
 ﻿using Ecommerce.Application.Events;
 using Ecommerce.Domain.Common;
-using Ecommerce.Domain.Events;
-using System;
-using System.Collections.Generic;
 using System.Reflection;
-using System.Text;
 
 namespace Ecommerce.Infrastructure.Events
 {

@@ -1,0 +1,34 @@
+﻿using Ecommerce.Domain.Common;
+using Ecommerce.Domain.Orders.Repositories;
+using MediatR;
+
+namespace Ecommerce.Application.Features.Orders.Cancel
+{
+    public class CancelOrderHandler:IRequestHandler<CancelOrderCommand>
+    {
+        private readonly IOrderRepository _repository;
+
+        public CancelOrderHandler(IOrderRepository repository)
+        {
+            _repository = repository;
+        }
+
+        public async Task Handle(CancelOrderCommand command,CancellationToken ct)
+        {
+            var order= await _repository.GetById(command.OrderId);
+
+            if (order is null)
+            {
+                throw new DomainException("Order not found");
+            }
+
+            var result = order.Cancel();
+            if(!result.IsSuccess)
+            {
+                throw new DomainException(result.Error!);
+            }
+
+            await _repository.Update(order);
+        }
+    }
+}

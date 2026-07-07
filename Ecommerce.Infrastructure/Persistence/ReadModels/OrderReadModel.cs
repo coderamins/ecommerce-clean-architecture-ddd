@@ -1,4 +1,6 @@
-﻿namespace Ecommerce.Infrastructure.Persistence.ReadModels
+﻿using Ecommerce.Domain.Common;
+
+namespace Ecommerce.Infrastructure.Persistence.ReadModels
 {
     public class OrderReadModel
     {
@@ -6,7 +8,7 @@
 
         public decimal Total { get; set; }
 
-        public bool IsPaid { get; set; }
+        public string Status { get; set; } = string.Empty;
 
         public List<OrderItemReadModel> Items { get; set; } = [];
     }

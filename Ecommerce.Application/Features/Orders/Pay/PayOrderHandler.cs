@@ -1,7 +1,7 @@
 ﻿using Ecommerce.Domain.Common;
 using Ecommerce.Domain.Orders.Repositories;
 
-namespace Ecommerce.Application.Commands.PayOrder
+namespace Ecommerce.Application.Features.Orders.Pay
 {
     public class PayOrderHandler
     {
@@ -12,7 +12,7 @@ namespace Ecommerce.Application.Commands.PayOrder
             _orderRepo = orderRepo;
         }
 
-        public async Task Execute(PayOrderCommand command)
+        public async Task Handle(PayOrderCommand command)
         {
             var order = await _orderRepo.Get(command.orderId);
 

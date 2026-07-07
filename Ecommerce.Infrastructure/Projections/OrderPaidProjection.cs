@@ -1,4 +1,5 @@
 ﻿using Ecommerce.Application.Events;
+using Ecommerce.Domain.Common;
 using Ecommerce.Domain.Events;
 using Ecommerce.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
@@ -20,7 +21,7 @@ namespace Ecommerce.Infrastructure.Projections
                 await _db.OrderReads
                     .FirstAsync(x => x.Id == domainEvent.OrderId);
 
-            order.IsPaid = true;
+            order.Status = OrderStatus.Paid.ToString();
 
             await _db.SaveChangesAsync();
         }

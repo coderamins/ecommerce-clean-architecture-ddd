@@ -1,5 +1,6 @@
 ﻿using Ecommerce.Domain.Common;
 using Ecommerce.Domain.Events;
+using Ecommerce.Domain.Orders.Events;
 using Ecommerce.Domain.Orders.ValueObjects;
 
 namespace Ecommerce.Domain.Orders;
@@ -12,16 +13,25 @@ public class Order : AggregateRoot
 
     public Money Total { get; private set; } = Money.Zero;
 
-    public OrderStatus Status { get; private set; }
-    = OrderStatus.Pending;
+    public OrderStatus Status { get; private set; } = OrderStatus.Pending;
 
     private Order() { }
     public static Order Create()
     {
-        var order = new Order();
-        order.AddEvent(new OrderCreated(order.Id));
+        return new Order();
+    }
 
-        return order;
+    public void CompleteCreation()
+    {
+        AddEvent(
+            new OrderCreated(
+                Id,
+                Total.Amount,
+                Items.Select(x => new OrderCreatedItem(
+                    x.ProductName,
+                    x.Quantity,
+                    x.Price.Amount))
+                .ToList()));
     }
 
     public Result AddItem(string product, int qty, Money price)
@@ -50,9 +60,19 @@ public class Order : AggregateRoot
 
     public Result Pay()
     {
-        if (Status==OrderStatus.Paid)
+        if (Status == OrderStatus.Cancelled)
+        {
+            return Result.Failure("Cancelled order cannot be paid");
+        }
+
+        if (Status == OrderStatus.Paid)
         {
             return Result.Failure("Order already paid");
+        }
+
+        if (Status == OrderStatus.Delivered)
+        {
+            return Result.Failure("Dlivered order cannot be paid");
         }
 
         if (!_items.Any())
@@ -78,7 +98,7 @@ public class Order : AggregateRoot
 
     private Result EnsureEditable()
     {
-        if (Status==OrderStatus.Paid)
+        if (Status == OrderStatus.Paid)
             return Result.Failure("Order already paid");
 
         return Result
@@ -93,9 +113,15 @@ public class Order : AggregateRoot
         if (Status == OrderStatus.Paid)
             return Result.Failure("Paid order cannot be cancelled");
 
+        if (Status == OrderStatus.Shipped)
+            return Result.Failure("Shipped order cannot be cancelled");
+
+        if (Status == OrderStatus.Delivered)
+            return Result.Failure("Delivered order cannot be cancelled");
+
         Status = OrderStatus.Cancelled;
 
-        //AddEvent(new OrderCancelled(Id, DateTime.UtcNow));
+        AddEvent(new OrderCancelled(Id, DateTime.UtcNow));
 
         return Result.Success();
     }

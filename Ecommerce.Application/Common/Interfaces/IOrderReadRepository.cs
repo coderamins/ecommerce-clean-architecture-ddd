@@ -1,6 +1,6 @@
-﻿using Ecommerce.Application.Queries.GetOrder;
+﻿using Ecommerce.Application.Features.Orders.Get;
 
-namespace Ecommerce.Application.Interfaces
+namespace Ecommerce.Application.Common.Interfaces
 {
     public interface IOrderReadRepository
     {

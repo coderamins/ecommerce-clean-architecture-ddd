@@ -1,5 +1,4 @@
-﻿
-namespace Ecommerce.Application.Queries.GetOrder
+﻿namespace Ecommerce.Application.Features.Orders.Get
 {
     public record OrderItemResponse
     (
@@ -12,7 +11,7 @@ namespace Ecommerce.Application.Queries.GetOrder
     (
         Guid Id,
         decimal Total,
-        bool IsPaid,
+        string Status,
         List<OrderItemResponse> Items
     );
 }

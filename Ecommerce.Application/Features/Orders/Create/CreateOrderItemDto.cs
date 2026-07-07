@@ -1,4 +1,4 @@
-﻿namespace Ecommerce.Application.DTOs
+﻿namespace Ecommerce.Application.Features.Orders.Create
 {
     public record CreateOrderItemDto(
             string ProductName,

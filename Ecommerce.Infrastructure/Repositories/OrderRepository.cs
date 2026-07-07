@@ -7,6 +7,7 @@ using Ecommerce.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 using System.Reflection;
 using System.Text.Json;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Ecommerce.Infrastructure.Repositories
 {
@@ -30,10 +31,35 @@ namespace Ecommerce.Infrastructure.Repositories
                 .FirstOrDefaultAsync(x => x.Id == id);
         }
 
+        public async Task<Order?> GetById(Guid orderId)
+        {
+            return await _db.Orders
+                    .Include(x => x.Items)
+                    .FirstOrDefaultAsync(
+                        x => x.Id == orderId);
+        }
+
         public async Task Save(Order order)
         {
             _db.Orders.Add(order);
 
+            AddOutboxMessages(order);
+
+            await _db.SaveChangesAsync();
+            order.ClearEvents();
+        }
+
+        public async Task Update(Order order)
+        {
+            AddOutboxMessages(order);
+
+            await _db.SaveChangesAsync();
+
+            order.ClearEvents();
+        }
+
+        private void AddOutboxMessages(Order order)
+        {
             foreach (var e in order.Events)
             {
                 var attribute = e.GetType()
@@ -46,32 +72,10 @@ namespace Ecommerce.Infrastructure.Repositories
                 {
                     Id = Guid.NewGuid(),
                     EventName = _metadataProvider.GetEventName(e),
-                    Data = JsonSerializer.Serialize(e),
+                    Data = JsonSerializer.Serialize(e, e.GetType()),
                     CreatedAt = DateTime.UtcNow
                 });
             }
-
-            await _db.SaveChangesAsync();
-            order.ClearEvents();
-        }
-
-        public async Task Update(Order order)
-        {
-            foreach (var e in order.Events)
-            {
-                _db.Outbox.Add(
-                    new OutboxMessage
-                    {
-                        Id = Guid.NewGuid(),
-                        EventName = _metadataProvider.GetEventName(e),
-                        Data = JsonSerializer.Serialize(e),
-                        CreatedAt = DateTime.UtcNow
-                    });
-            }
-
-            await _db.SaveChangesAsync();
-
-            order.ClearEvents();
         }
     }
 }

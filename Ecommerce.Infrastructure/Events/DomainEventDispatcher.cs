@@ -26,7 +26,7 @@ namespace Ecommerce.Infrastructure.Events
             foreach (var handler in handlers)
             {
                 var method =
-                    handlerType.GetMethod("handle");
+                    handlerType.GetMethod(nameof(IDomainEventHandler<DomainEvent>.Handle));
 
                 if (method is null)
                     continue;

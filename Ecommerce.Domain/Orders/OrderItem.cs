@@ -9,10 +9,7 @@ namespace Ecommerce.Domain.Orders
         public int Quantity { get; private set; }
         public Money Price { get; private set; }
         private OrderItem() { }
-        public OrderItem(
-            string productName,
-            int quantity,
-            Money price)
+        public OrderItem(string productName, int quantity, Money price)
         {
             if (quantity <= 0)
                 throw new DomainException("Quantity Invalid!");
