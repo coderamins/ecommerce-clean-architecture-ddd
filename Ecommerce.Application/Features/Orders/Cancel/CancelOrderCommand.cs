@@ -1,6 +1,8 @@
-﻿using MediatR;
+﻿using Ecommerce.Application.Common.Abstractions;
+using MediatR;
 
 namespace Ecommerce.Application.Features.Orders.Cancel
 {
-    public record CancelOrderCommand(Guid OrderId):IRequest;
+    public sealed record CancelOrderCommand(Guid OrderId)
+    : ICommand<Unit>;
 }

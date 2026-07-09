@@ -1,9 +1,10 @@
 ﻿using Ecommerce.Domain.Common;
 using Ecommerce.Domain.Orders.Repositories;
+using MediatR;
 
 namespace Ecommerce.Application.Features.Orders.Pay
 {
-    public class PayOrderHandler
+    public sealed class PayOrderHandler:IRequestHandler<PayOrderCommand, Unit>
     {
         private readonly IOrderRepository _orderRepo;
 
@@ -12,9 +13,11 @@ namespace Ecommerce.Application.Features.Orders.Pay
             _orderRepo = orderRepo;
         }
 
-        public async Task Handle(PayOrderCommand command)
+        public async Task<Unit> Handle(
+            PayOrderCommand command,
+            CancellationToken cancellationToken)
         {
-            var order = await _orderRepo.Get(command.orderId);
+            var order = await _orderRepo.Get(command.OrderId);
 
             if(order is null)
             {
@@ -28,6 +31,8 @@ namespace Ecommerce.Application.Features.Orders.Pay
             }
 
             await _orderRepo.Update(order);
+
+            return Unit.Value;
         }
     }
 }

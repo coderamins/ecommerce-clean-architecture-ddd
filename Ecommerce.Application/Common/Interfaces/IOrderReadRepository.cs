@@ -4,6 +4,8 @@ namespace Ecommerce.Application.Common.Interfaces
 {
     public interface IOrderReadRepository
     {
-        Task<GetOrderResponse?> Get(Guid id);
+        Task<GetOrderResponse?> GetByIdAsync(
+            Guid orderId,
+            CancellationToken cancellationToken = default);
     }
 }

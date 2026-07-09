@@ -6,7 +6,7 @@ namespace Ecommerce.Domain.Orders.Repositories
     {
         Task<Order?> Get(Guid id);
         Task<Order> GetById(Guid orderId);
-        Task Save(Order order);
+        Task Add(Order order);
         Task Update(Order order);
     }
 }

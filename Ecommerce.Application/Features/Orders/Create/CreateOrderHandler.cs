@@ -32,7 +32,7 @@ namespace Ecommerce.Application.Features.Orders.Create
 
             order.CompleteCreation();
 
-            await _repository.Save(order);
+            await _repository.Add(order);
 
             return order.Id;
         }

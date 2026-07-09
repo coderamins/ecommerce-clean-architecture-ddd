@@ -14,10 +14,12 @@ namespace Ecommerce.Infrastructure.Repositories
             _db = db;
         }
 
-        public async Task<GetOrderResponse?> Get(Guid id)
+        public async Task<GetOrderResponse?> GetByIdAsync(
+            Guid orderId, 
+            CancellationToken cancellationToken = default)
         {
             return await _db.OrderReads
-                .Where(x => x.Id == id)
+                .Where(x => x.Id == orderId)
                 .Select(
                     x =>
                     new GetOrderResponse(

@@ -4,7 +4,8 @@ using MediatR;
 
 namespace Ecommerce.Application.Features.Orders.Cancel
 {
-    public class CancelOrderHandler:IRequestHandler<CancelOrderCommand>
+    public sealed class CancelOrderHandler
+        :IRequestHandler<CancelOrderCommand,Unit>
     {
         private readonly IOrderRepository _repository;
 
@@ -13,7 +14,7 @@ namespace Ecommerce.Application.Features.Orders.Cancel
             _repository = repository;
         }
 
-        public async Task Handle(CancelOrderCommand command,CancellationToken ct)
+        public async Task<Unit> Handle(CancelOrderCommand command,CancellationToken ct)
         {
             var order= await _repository.GetById(command.OrderId);
 
@@ -29,6 +30,8 @@ namespace Ecommerce.Application.Features.Orders.Cancel
             }
 
             await _repository.Update(order);
+
+            return Unit.Value;
         }
     }
 }

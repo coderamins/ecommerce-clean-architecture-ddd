@@ -39,21 +39,18 @@ namespace Ecommerce.Infrastructure.Repositories
                         x => x.Id == orderId);
         }
 
-        public async Task Save(Order order)
+        public async Task Add(Order order)
         {
             _db.Orders.Add(order);
 
             AddOutboxMessages(order);
 
-            await _db.SaveChangesAsync();
             order.ClearEvents();
         }
 
         public async Task Update(Order order)
         {
             AddOutboxMessages(order);
-
-            await _db.SaveChangesAsync();
 
             order.ClearEvents();
         }

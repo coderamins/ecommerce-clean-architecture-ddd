@@ -37,6 +37,8 @@ namespace Ecommerce.Infrastructure
             services.AddSingleton<IEventRegistry, EventRegistry>();
             services.AddSingleton<IEventMetadataProvider,EventMetadataProvider>();
 
+            services.AddScoped<IUnitOfWork,UnitOfWork>();
+
 
             return services;
         }

@@ -24,6 +24,8 @@ namespace Ecommerce.Application
 
             services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
 
+            services.AddTransient(typeof(IPipelineBehavior<,>),typeof(TransactionBehavior<,>));
+
             return services;
         }
     }
