@@ -27,6 +27,7 @@ namespace Ecommerce.Application.Behaviors
                 foreach (var key in invalidate.CacheKeys)
                 {
                     await _cache.RemoveAsync(key, cancellationToken);
+                    Console.WriteLine($"Cache REMOVED: {key}");
                 }
             }
 

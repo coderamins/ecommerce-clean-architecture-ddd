@@ -36,11 +36,14 @@ namespace Ecommerce.Infrastructure
 
             services.AddScoped<IOrderRepository, OrderRepository>();
 
+            services.AddScoped<ITransactionManager,TransactionManager>();   
+
             services.AddSingleton<IEventRegistry, EventRegistry>();
             services.AddSingleton<IEventMetadataProvider,EventMetadataProvider>();
 
             services.AddMemoryCache();
             services.AddScoped<ICacheService, MemoryCacheService>();
+
 
             services.AddScoped<IUnitOfWork,UnitOfWork>();
 

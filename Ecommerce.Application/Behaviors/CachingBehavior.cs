@@ -19,24 +19,30 @@ namespace Ecommerce.Application.Behaviors
             RequestHandlerDelegate<TResponse> next,
             CancellationToken cancellationToken)
         {
-            if (request is not ICachable cachable)
+            Console.WriteLine("CachingBehavior Executed");
+            if (request is not ICacheable cacheable)
                 return await next();
 
             var cached =
                 await _cache.GetAsync<TResponse>(
-                        cachable.CacheKey,
+                        cacheable.CacheKey,
                         cancellationToken);
 
             if (cached is not null)
+            {
+                Console.WriteLine($"Cache HIT: {cacheable.CacheKey}");
                 return cached;
+            }
+
+            Console.WriteLine($"Cache MISS: {cacheable.CacheKey}");
 
             var response= await next();
 
             await _cache.SetAsync(
-                cachable.CacheKey,
+                cacheable.CacheKey,
                 response,
-                cachable.Expiration, 
-                cancellationToken);
+                cacheable.Expiration, 
+                cancellationToken);           
 
             return response;
         }

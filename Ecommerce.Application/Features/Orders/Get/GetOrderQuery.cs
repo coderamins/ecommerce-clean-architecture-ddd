@@ -4,7 +4,7 @@ namespace Ecommerce.Application.Features.Orders.Get
 {
     public record GetOrderQuery(Guid OrderId) :
         IQuery<GetOrderResponse>,
-        ICachable
+        ICacheable
     {
         public string CacheKey
             => $"orders:{OrderId}";

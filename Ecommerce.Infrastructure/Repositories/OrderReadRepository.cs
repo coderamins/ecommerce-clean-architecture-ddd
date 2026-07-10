@@ -18,6 +18,7 @@ namespace Ecommerce.Infrastructure.Repositories
             Guid orderId, 
             CancellationToken cancellationToken = default)
         {
+            Console.WriteLine("Reading From Database");
             return await _db.OrderReads
                 .Where(x => x.Id == orderId)
                 .Select(

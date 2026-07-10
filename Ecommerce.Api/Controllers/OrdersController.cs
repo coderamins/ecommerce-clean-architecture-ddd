@@ -27,7 +27,8 @@ namespace Ecommerce.Api.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create([FromBody] CreateOrderCommand command)
+        public async Task<IActionResult> Create(
+            [FromBody] CreateOrderCommand command)
         {
             var id = await _sender.Send(command);
 
@@ -36,7 +37,7 @@ namespace Ecommerce.Api.Controllers
 
         [HttpPost("{id}/pay")]
         public async Task<IActionResult> Pay(Guid id,
-            [FromServices] PayOrderHandler command)
+            [FromBody] PayOrderCommand command)
         {
             await _sender.Send(command);
 
