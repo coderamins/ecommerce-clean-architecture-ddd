@@ -3,6 +3,7 @@ using Ecommerce.Application.Events;
 using Ecommerce.Domain.Events;
 using Ecommerce.Domain.Orders.Events;
 using Ecommerce.Domain.Orders.Repositories;
+using Ecommerce.Infrastructure.Cache;
 using Ecommerce.Infrastructure.Events;
 using Ecommerce.Infrastructure.Outbox;
 using Ecommerce.Infrastructure.Persistence;
@@ -10,6 +11,7 @@ using Ecommerce.Infrastructure.Projections;
 using Ecommerce.Infrastructure.Repositories;
 using Ecommerce.Infrastructure.Workers;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Ecommerce.Infrastructure
@@ -36,6 +38,9 @@ namespace Ecommerce.Infrastructure
 
             services.AddSingleton<IEventRegistry, EventRegistry>();
             services.AddSingleton<IEventMetadataProvider,EventMetadataProvider>();
+
+            services.AddMemoryCache();
+            services.AddScoped<ICacheService, MemoryCacheService>();
 
             services.AddScoped<IUnitOfWork,UnitOfWork>();
 

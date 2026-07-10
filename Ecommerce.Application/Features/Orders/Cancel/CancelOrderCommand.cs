@@ -4,5 +4,12 @@ using MediatR;
 namespace Ecommerce.Application.Features.Orders.Cancel
 {
     public sealed record CancelOrderCommand(Guid OrderId)
-    : ICommand<Unit>;
+    : ICommand<Unit>,
+        IInvalidateCache
+    {
+        public IEnumerable<string> CacheKeys
+        {
+            get { yield return $"orders:{OrderId}"; }
+        }
+    }
 }

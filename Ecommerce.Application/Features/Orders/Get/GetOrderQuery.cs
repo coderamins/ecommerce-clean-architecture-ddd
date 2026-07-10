@@ -1,7 +1,15 @@
 ﻿using Ecommerce.Application.Common.Abstractions;
-using MediatR;
 
 namespace Ecommerce.Application.Features.Orders.Get
 {
-    public record GetOrderQuery(Guid OrderId) : IQuery<GetOrderResponse>;
+    public record GetOrderQuery(Guid OrderId) :
+        IQuery<GetOrderResponse>,
+        ICachable
+    {
+        public string CacheKey
+            => $"orders:{OrderId}";
+
+        public TimeSpan Expiration
+            => TimeSpan.FromMinutes(5);
+    }
 }
