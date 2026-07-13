@@ -11,7 +11,6 @@ using Ecommerce.Infrastructure.Projections;
 using Ecommerce.Infrastructure.Repositories;
 using Ecommerce.Infrastructure.Workers;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Ecommerce.Infrastructure

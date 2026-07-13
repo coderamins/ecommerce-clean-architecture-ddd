@@ -19,8 +19,7 @@ namespace Ecommerce.Infrastructure.Workers
         {
             while (!ct.IsCancellationRequested)
             {
-                using var scope =
-             _provider.CreateScope();
+                using var scope = _provider.CreateScope();
 
                 var db =
                     scope.ServiceProvider
