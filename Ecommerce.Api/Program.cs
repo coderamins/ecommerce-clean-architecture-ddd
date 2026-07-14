@@ -1,4 +1,5 @@
 using Ecommerce.Api.Extensions;
+using Ecommerce.Api.Middleware;
 using Ecommerce.Application;
 using Ecommerce.Infrastructure;
 using Serilog;
@@ -37,6 +38,7 @@ app.UseHttpsRedirection();
 app.UseSwagger();
 app.UseSwaggerUI();
 app.UseGlobalExceptions();
+app.UseMiddleware<CorrelationIdMiddleware>();
 app.UseSerilogRequestLogging();
 app.MapControllers();
 

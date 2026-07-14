@@ -9,9 +9,11 @@ using Ecommerce.Infrastructure.Outbox;
 using Ecommerce.Infrastructure.Persistence;
 using Ecommerce.Infrastructure.Projections;
 using Ecommerce.Infrastructure.Repositories;
+using Ecommerce.Infrastructure.Services;
 using Ecommerce.Infrastructure.Workers;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.AspNetCore.Http.Abstractions;
 
 namespace Ecommerce.Infrastructure
 {
@@ -43,6 +45,8 @@ namespace Ecommerce.Infrastructure
             services.AddMemoryCache();
             services.AddScoped<ICacheService, MemoryCacheService>();
 
+            services.AddHttpContextAccessor();
+            services.AddScoped<IRequestContext, RequestContext>();
 
             services.AddScoped<IUnitOfWork,UnitOfWork>();
 
