@@ -1,4 +1,5 @@
-﻿using Ecommerce.Application.Events;
+﻿using Ecommerce.Application.Common.Interfaces;
+using Ecommerce.Application.Events;
 using Ecommerce.Domain.Common;
 using Ecommerce.Domain.Orders;
 using Ecommerce.Domain.Orders.Repositories;
@@ -7,7 +8,6 @@ using Ecommerce.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 using System.Reflection;
 using System.Text.Json;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Ecommerce.Infrastructure.Repositories
 {
@@ -15,12 +15,15 @@ namespace Ecommerce.Infrastructure.Repositories
     {
         private readonly ApplicationDbContext _db;
         private readonly IEventMetadataProvider _metadataProvider;
+        private readonly IRequestContext _requestContext;
 
-        public OrderRepository(ApplicationDbContext db, 
-            IEventMetadataProvider metadataProvider)
+        public OrderRepository(ApplicationDbContext db,
+            IEventMetadataProvider metadataProvider,
+            IRequestContext requestContext)
         {
             _db = db;
             _metadataProvider = metadataProvider;
+            _requestContext = requestContext;
         }
 
         public async Task<Order?> Get(Guid id)
@@ -70,6 +73,7 @@ namespace Ecommerce.Infrastructure.Repositories
                     Id = Guid.NewGuid(),
                     EventName = _metadataProvider.GetEventName(e),
                     Data = JsonSerializer.Serialize(e, e.GetType()),
+                    CorrelationId = _requestContext.CorrelationId,
                     CreatedAt = DateTime.UtcNow
                 });
             }

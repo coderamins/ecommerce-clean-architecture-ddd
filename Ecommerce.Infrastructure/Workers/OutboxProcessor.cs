@@ -1,8 +1,10 @@
-﻿using Ecommerce.Application.Common.Interfaces;
+﻿using Ecommerce.Application.Common.Constants;
+using Ecommerce.Application.Common.Interfaces;
 using Ecommerce.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Serilog.Context;
 
 namespace Ecommerce.Infrastructure.Workers
 {
@@ -36,7 +38,12 @@ namespace Ecommerce.Infrastructure.Workers
 
                 foreach (var message in messages)
                 {
-                    await processor.Process(message.Id);
+                    using (LogContext.PushProperty(
+                            CorrelationConstants.PropertyName,
+                            message.CorrelationId))
+                    {
+                        await processor.Process(message.Id,ct);
+                    }
                 }
 
                 await Task.Delay(
