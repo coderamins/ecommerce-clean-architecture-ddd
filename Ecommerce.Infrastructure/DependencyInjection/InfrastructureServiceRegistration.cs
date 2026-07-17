@@ -5,6 +5,7 @@ using Ecommerce.Domain.Orders.Events;
 using Ecommerce.Domain.Orders.Repositories;
 using Ecommerce.Infrastructure.Cache;
 using Ecommerce.Infrastructure.Events;
+using Ecommerce.Infrastructure.Extensions;
 using Ecommerce.Infrastructure.Outbox;
 using Ecommerce.Infrastructure.Persistence;
 using Ecommerce.Infrastructure.Projections;
@@ -12,18 +13,19 @@ using Ecommerce.Infrastructure.Repositories;
 using Ecommerce.Infrastructure.Services;
 using Ecommerce.Infrastructure.Workers;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.AspNetCore.Http.Abstractions;
 
-namespace Ecommerce.Infrastructure
+namespace Ecommerce.Infrastructure.DependencyInjection
 {
-    public static class DependencyInjection
+    public static class InfrastructureServiceRegistration
     {
-        public static IServiceCollection AddInfrastructure(this IServiceCollection services,
-            string connection)
+        public static IServiceCollection AddInfrastructure(
+            this IServiceCollection services,
+            IConfiguration configuration)
         {
             services.AddDbContext<ApplicationDbContext>(x =>
-                x.UseNpgsql(connection)
+                x.UseNpgsql(configuration.GetConnectionString("DefaultConnection")?? "")
             );
 
             services.AddScoped<IDomainEventDispatcher, DomainEventDispatcher>();
@@ -50,6 +52,7 @@ namespace Ecommerce.Infrastructure
 
             services.AddScoped<IUnitOfWork,UnitOfWork>();
 
+            services.AddApplicationHealthChecks(configuration);
 
             return services;
         }

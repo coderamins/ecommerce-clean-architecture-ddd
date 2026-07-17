@@ -1,4 +1,5 @@
-﻿using Ecommerce.Domain.Common;
+﻿using Ecommerce.Application.Common.Exceptions;
+using Ecommerce.Domain.Common;
 using Ecommerce.Domain.Orders.Repositories;
 using MediatR;
 
@@ -20,7 +21,7 @@ namespace Ecommerce.Application.Features.Orders.Cancel
 
             if (order is null)
             {
-                throw new DomainException("Order not found");
+                throw new NotFoundException("Order not found");
             }
 
             var result = order.Cancel();

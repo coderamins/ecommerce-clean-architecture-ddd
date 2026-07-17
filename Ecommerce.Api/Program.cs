@@ -1,45 +1,18 @@
 using Ecommerce.Api.Extensions;
-using Ecommerce.Api.Middleware;
 using Ecommerce.Application;
-using Ecommerce.Infrastructure;
-using Serilog;
+using Ecommerce.Infrastructure.DependencyInjection;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddOpenApi();
+builder.Host.AddSerilogLogging();
 
-builder.Services.AddApplication();
-
-builder.Host.UseSerilog((context,services,configuration)=>
-{
-    configuration
-    .ReadFrom.Configuration(context.Configuration)
-    .ReadFrom.Services(services)
-    .Enrich.FromLogContext();
-});
-
-builder.Services.AddInfrastructure(
-    builder.Configuration
-    .GetConnectionString("DefaultConnection")?? "");
-
-builder.Services.AddControllers();
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services
+    .AddPresentation()
+    .AddApplication()
+    .AddInfrastructure(builder.Configuration);
 
 var app = builder.Build();
 
-if (app.Environment.IsDevelopment())
-{
-    app.MapOpenApi();
-}
-
-app.UseHttpsRedirection();
-
-app.UseSwagger();
-app.UseSwaggerUI();
-app.UseGlobalExceptions();
-app.UseMiddleware<CorrelationIdMiddleware>();
-app.UseSerilogRequestLogging();
-app.MapControllers();
+app.UsePresentation();
 
 app.Run();

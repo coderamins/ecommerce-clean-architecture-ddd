@@ -1,5 +1,7 @@
 ﻿using FluentValidation;
 using MediatR;
+using AppValidationException =
+    Ecommerce.Application.Common.Exceptions.ValidationException;
 
 namespace Ecommerce.Application.Behaviors
 {
@@ -31,8 +33,14 @@ namespace Ecommerce.Application.Behaviors
                 .Where(x => x is not null)
                 .ToList();
 
+            var errors = failures
+                .GroupBy(x => x.PropertyName)
+                .ToDictionary(
+                    g => g.Key,
+                    g => g.Select(x => x.ErrorMessage).ToArray());
+
             if (failures.Any())
-                throw new ValidationException(failures);
+                throw new AppValidationException(errors);
 
             return await next();
         }
