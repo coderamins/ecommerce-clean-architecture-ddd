@@ -1,4 +1,4 @@
-﻿namespace Ecommerce.Infrastructure.Messaging
+﻿namespace Ecommerce.Infrastructure.Messaging.RabbitMQ
 {
     public sealed class RabbitMqOptions
     {

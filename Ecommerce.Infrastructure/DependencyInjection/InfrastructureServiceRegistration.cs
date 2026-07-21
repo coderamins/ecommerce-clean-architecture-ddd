@@ -7,6 +7,7 @@ using Ecommerce.Infrastructure.Cache;
 using Ecommerce.Infrastructure.Events;
 using Ecommerce.Infrastructure.Extensions;
 using Ecommerce.Infrastructure.Messaging;
+using Ecommerce.Infrastructure.Messaging.RabbitMQ;
 using Ecommerce.Infrastructure.Outbox;
 using Ecommerce.Infrastructure.Persistence;
 using Ecommerce.Infrastructure.Projections;
@@ -55,8 +56,7 @@ namespace Ecommerce.Infrastructure.DependencyInjection
 
             services.AddApplicationHealthChecks(configuration);
 
-            services.Configure<RabbitMqOptions>(
-                 configuration.GetSection(RabbitMqOptions.SectionName));
+            services.AddRabbitMq(configuration);
 
             return services;
         }
