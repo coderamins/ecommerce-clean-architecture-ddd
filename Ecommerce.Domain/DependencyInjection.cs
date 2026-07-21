@@ -1,4 +1,5 @@
-﻿using Ecommerce.Domain.Factories;
+﻿
+using Ecommerce.Domain.Factories;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Ecommerce.Domain

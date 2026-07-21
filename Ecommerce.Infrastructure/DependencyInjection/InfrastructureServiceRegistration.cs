@@ -6,6 +6,7 @@ using Ecommerce.Domain.Orders.Repositories;
 using Ecommerce.Infrastructure.Cache;
 using Ecommerce.Infrastructure.Events;
 using Ecommerce.Infrastructure.Extensions;
+using Ecommerce.Infrastructure.Messaging;
 using Ecommerce.Infrastructure.Outbox;
 using Ecommerce.Infrastructure.Persistence;
 using Ecommerce.Infrastructure.Projections;
@@ -53,6 +54,9 @@ namespace Ecommerce.Infrastructure.DependencyInjection
             services.AddScoped<IUnitOfWork,UnitOfWork>();
 
             services.AddApplicationHealthChecks(configuration);
+
+            services.Configure<RabbitMqOptions>(
+                 configuration.GetSection(RabbitMqOptions.SectionName));
 
             return services;
         }
