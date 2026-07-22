@@ -3,7 +3,10 @@
     public interface IEventBus
     {
         Task PublishAsync(
-            IntegrationEvent integrationEvent,
+            string eventName,
+            string payload,
+            string correlationId,
+            //IntegrationEvent integrationEvent,
             CancellationToken cancellationToken = default);
     }
 }

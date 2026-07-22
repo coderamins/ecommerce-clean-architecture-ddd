@@ -10,7 +10,7 @@ namespace Ecommerce.Infrastructure.Messaging.RabbitMQ
     {
         public static IServiceCollection AddRabbitMq(
             this IServiceCollection services,
-            IConfiguration configuration) 
+            IConfiguration configuration)
         {
             services.Configure<RabbitMqOptions>(
                 configuration.GetSection(RabbitMqOptions.SectionName));
@@ -32,6 +32,8 @@ namespace Ecommerce.Infrastructure.Messaging.RabbitMQ
             services.AddSingleton<IRabbitMqConnection, RabbitMqConnection>();
 
             services.AddSingleton<IEventBus, RabbitMqEventBus>();
+
+            services.AddSingleton<IRabbitMqInitializer, RabbitMqInitializer>();
 
             return services;
         }

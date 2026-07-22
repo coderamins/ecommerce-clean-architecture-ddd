@@ -19,7 +19,9 @@ namespace Ecommerce.Infrastructure.Messaging.RabbitMQ
             _connection = connection;
         }
         public async Task PublishAsync(
-            IntegrationEvent integrationEvent, 
+            string eventName, 
+            string payload, 
+            string correlationId, 
             CancellationToken cancellationToken = default)
         {
             var connection =
@@ -30,30 +32,30 @@ namespace Ecommerce.Infrastructure.Messaging.RabbitMQ
 
             const string exchange = "ecommerce.events";
 
-            await channel.ExchangeDeclareAsync(
-                    exchange: exchange,
-                    type: ExchangeType.Topic,
-                    durable: true,
-                    autoDelete: false,
-                    cancellationToken: cancellationToken
-                );
-
-            var routingKey = integrationEvent.GetType().Name;
+            var routingKey =eventName;
 
             var body = Encoding.UTF8.GetBytes(
-                JsonSerializer.Serialize(integrationEvent));
+                JsonSerializer.Serialize(payload));
+
+            var properties = new BasicProperties
+            {
+                Persistent = true,
+                CorrelationId = correlationId
+            };
 
             await channel.BasicPublishAsync(
                 exchange: exchange,
                 routingKey: routingKey,
                 mandatory: false,
+                basicProperties: properties,
                 body: body,
                 cancellationToken: cancellationToken);
 
             _logger.LogInformation(
-                "Published integration event {EventType}",
-                routingKey);
+                "Published event {EventName}",
+                eventName);
 
         }
+
     }
 }
